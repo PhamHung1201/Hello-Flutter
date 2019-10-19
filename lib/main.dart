@@ -8,22 +8,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: "This is my first Flutter App",
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text("This is Header title"),
-        ),
-        body: Center(
-            child: RandomEnglishWord()
-        ),
-      ),
-    );
+        title: "This is my first Flutter App",
+        debugShowCheckedModeBanner: false,
+        home: RandomEnglishWord());
   }
 }
 
 class RandomEnglishWord extends StatefulWidget {
-
   @override
   State createState() {
     return RandomEnglishWordState();
@@ -31,12 +22,45 @@ class RandomEnglishWord extends StatefulWidget {
 }
 
 class RandomEnglishWordState extends State<RandomEnglishWord> {
+  final words = <WordPair>[];
+  final _checkedWords = Set<WordPair>();
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      WordPair.random().asUpperCase,
-      style: TextStyle(fontSize: 22.0),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("List of English words"),
+      ),
+      body: ListView.builder(itemBuilder: (context, index) {
+        if (index >= words.length) {
+          words.addAll(generateWordPairs().take(10));
+        }
+        return _buildRow(words[index], index);
+      }),
+    );
+  }
+
+  Widget _buildRow(WordPair wordPair, int index) {
+    final textColor = index % 2 == 0 ? Colors.red : Colors.blue;
+    final isCheckedWord = _checkedWords.contains(wordPair);
+    return ListTile(
+      leading: Icon(
+        isCheckedWord ? Icons.check_box : Icons.check_box_outline_blank,
+        color: textColor,
+      ),
+      title: Text(
+        wordPair.asUpperCase,
+        style: TextStyle(fontSize: 18.0, color: textColor),
+      ),
+      onTap: () {
+        setState(() {
+          if (isCheckedWord) {
+            _checkedWords.remove(wordPair);
+          } else {
+            _checkedWords.add(wordPair);
+          }
+        });
+      },
     );
   }
 }
