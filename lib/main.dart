@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:english_words/english_words.dart';
+import 'package:hello_world/SampleLayout.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(SampleLayout());
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
