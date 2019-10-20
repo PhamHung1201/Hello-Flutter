@@ -30,6 +30,9 @@ class RandomEnglishWordState extends State<RandomEnglishWord> {
     return Scaffold(
       appBar: AppBar(
         title: Text("List of English words"),
+        actions: <Widget>[
+          IconButton(icon: Icon(Icons.list), onPressed: _pushToSaveWordsScreen)
+        ],
       ),
       body: ListView.builder(itemBuilder: (context, index) {
         if (index >= words.length) {
@@ -38,6 +41,29 @@ class RandomEnglishWordState extends State<RandomEnglishWord> {
         return _buildRow(words[index], index);
       }),
     );
+  }
+
+  _pushToSaveWordsScreen() {
+
+    final pageRoute = MaterialPageRoute(builder: (context){
+      final listTitles = _checkedWords.map((wordPair) {
+        return ListTile(
+          title: Text(
+            wordPair.asUpperCase,
+            style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+          )
+        );
+      });
+      
+      return Scaffold(
+        appBar: AppBar(
+          title: Text("Checked words"),
+        ),
+        body: ListView(children: listTitles.toList())
+      );
+    });
+
+    Navigator.of(context).push(pageRoute);
   }
 
   Widget _buildRow(WordPair wordPair, int index) {
